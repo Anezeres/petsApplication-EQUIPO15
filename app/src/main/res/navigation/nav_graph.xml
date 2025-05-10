@@ -20,20 +20,15 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_nuevaCitaFragment"
-            app:destination="@id/nuevaCitaFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_detalleCitaFragment"
             app:destination="@id/detalleCitaFragment" />
         <action
             android:id="@+id/action_homeFragment_to_editarCitaFragment"
             app:destination="@id/editarCitaFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_nuevaCitaFragment"
+            app:destination="@id/nuevaCitaFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/nuevaCitaFragment"
-        android:name="com.example.petsapplication.view.fragment.NuevaCitaFragment"
-        android:label="fragment_nueva_cita"
-        tools:layout="@layout/fragment_nueva_cita" />
     <fragment
         android:id="@+id/detalleCitaFragment"
         android:name="com.example.petsapplication.view.fragment.DetalleCitaFragment"
@@ -44,4 +39,9 @@
         android:name="com.example.petsapplication.view.fragment.EditarCitaFragment"
         android:label="fragment_editar_cita"
         tools:layout="@layout/fragment_editar_cita" />
+    <fragment
+        android:id="@+id/nuevaCitaFragment"
+        android:name="com.example.petsapplication.view.fragment.NuevaCitaFragment"
+        android:label="fragment_nueva_cita"
+        tools:layout="@layout/fragment_nueva_cita" />
 </navigation>
