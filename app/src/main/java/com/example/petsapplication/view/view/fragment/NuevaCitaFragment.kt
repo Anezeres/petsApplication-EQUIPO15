@@ -1,4 +1,4 @@
-package com.example.petsapplication.view.fragment
+package com.example.petsapplication.view.view.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
