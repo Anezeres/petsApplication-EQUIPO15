@@ -26,7 +26,7 @@ DogApp es una aplicación móvil desarrollada en Android Studio que permite a lo
 - **Room** para persistencia de datos
 - **Lottie** para animaciones JSON
 - **Git** y **GitHub** para control de versiones
-- **Jira** para la gestión ágil del proyecto
+- **Trello** para la gestión ágil del proyecto
 
 ## 🎯 Historias de Usuario Implementadas
 
