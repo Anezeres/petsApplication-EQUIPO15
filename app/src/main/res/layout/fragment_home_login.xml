@@ -18,7 +18,7 @@
             android:layout_marginTop="412dp"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="80sp"
+            android:textSize="70sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -28,28 +28,32 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/logo"
+            android:translationX="70dp"
+            android:translationY="-50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.02"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="TODO" />
+            android:layout_marginTop="19dp"
+            android:layout_marginBottom="16dp" />
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/biometricImg"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/huella"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="183dp"
+            android:layout_height="182dp"
+            android:layout_marginTop="90dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.55"
-            android:contentDescription="TODO" />
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/animation_scan" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
