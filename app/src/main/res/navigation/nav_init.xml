@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_init"
+    app:startDestination="@id/homeLoginFragment">
+
+    <fragment
+        android:id="@+id/homeLoginFragment"
+        android:name="com.example.petsapplication.view.view.fragment.HomeLoginFragment"
+        android:label="fragment_home_login"
+        tools:layout="@layout/fragment_home_login" >
+        <action
+            android:id="@+id/action_homeLoginFragment_to_appointmentSchedulerFragment"
+            app:destination="@id/appointmentSchedulerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appointmentSchedulerFragment"
+        android:name="com.example.petsapplication.view.view.fragment.AppointmentSchedulerFragment"
+        android:label="fragment_appointment_scheduler"
+        tools:layout="@layout/fragment_appointment_scheduler" >
+        <action
+            android:id="@+id/action_appointmentSchedulerFragment_to_addNewAppointmentFragment"
+            app:destination="@id/addNewAppointmentFragment" />
+        <action
+            android:id="@+id/action_appointmentSchedulerFragment_to_appointmentDetailsFragment"
+            app:destination="@id/appointmentDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewAppointmentFragment"
+        android:name="com.example.petsapplication.view.view.fragment.AddNewAppointmentFragment"
+        android:label="AddNewAppointmentFragment"
+        tools:layout="@layout/fragment_add_new_appointment">
+        <action
+            android:id="@+id/action_addNewAppointmentFragment_to_appointmentSchedulerFragment"
+            app:destination="@id/appointmentSchedulerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appointmentDetailsFragment"
+        android:name="com.example.petsapplication.view.view.fragment.AppointmentDetailsFragment"
+        android:label="AppointmentDetailsFragment"
+        tools:layout="@layout/fragment_appointment_details">
+        <action
+            android:id="@+id/action_appointmentDetailsFragment_to_appointmentSchedulerFragment"
+            app:destination="@id/appointmentSchedulerFragment" />
+        <action
+            android:id="@+id/action_appointmentDetailsFragment_to_editAppointmentFragment"
+            app:destination="@id/editAppointmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editAppointmentFragment"
+        android:name="com.example.petsapplication.view.view.fragment.EditAppointmentFragment"
+        android:label="EditAppointmentFragment"
+        tools:layout="@layout/fragment_edit_appointment">
+        <action
+            android:id="@+id/action_editAppointmentFragment_to_appointmentDetailsFragment"
+            app:destination="@id/appointmentDetailsFragment" />
+        <action
+            android:id="@+id/action_editAppointmentFragment_to_appointmentSchedulerFragment"
+            app:destination="@id/appointmentSchedulerFragment" />
+    </fragment>
+</navigation>
