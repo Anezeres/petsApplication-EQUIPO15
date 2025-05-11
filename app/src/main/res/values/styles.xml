@@ -68,5 +68,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">#703DCA</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+
 
 </resources>
