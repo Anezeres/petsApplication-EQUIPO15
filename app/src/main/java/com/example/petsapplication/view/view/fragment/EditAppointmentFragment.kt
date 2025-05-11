@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,6 +14,7 @@ import com.example.petsapplication.databinding.FragmentEditAppointmentBinding
 import com.example.petsapplication.view.model.InventoryAppointment
 import com.example.petsapplication.view.viewmodel.AppointmentModel
 import com.google.android.material.textfield.TextInputEditText
+import androidx.core.widget.addTextChangedListener
 
 class EditAppointmentFragment : Fragment() {
     private lateinit var binding: FragmentEditAppointmentBinding
@@ -23,7 +23,7 @@ class EditAppointmentFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentEditAppointmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
         return binding.root
@@ -31,6 +31,7 @@ class EditAppointmentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         // Recupera los datos del bundle
         val petName = arguments?.getString("petName")
         val petBreed = arguments?.getString("petBreed")
@@ -39,36 +40,56 @@ class EditAppointmentFragment : Fragment() {
         val phone = arguments?.getString("phone")
         val idNumber = arguments?.getString("idNumber")
 
-        // Asigna los datos a los TextView correspondientes
-//        binding.editPetName.text = petName
-        val editPetName: TextInputEditText = view.findViewById(R.id.editPetName)
-        editPetName.setText(petName)
-        val editOwner: TextInputEditText = view.findViewById(R.id.editOwner)
-        editOwner.setText(owner)
-        val editPhone: TextInputEditText = view.findViewById(R.id.editPhone)
-        editPhone.setText(phone)
-        val autoCompleteTextView: AutoCompleteTextView = view.findViewById(R.id.autoCompleteText)
-        autoCompleteTextView.setText(petBreed)
-//        binding.autoCompleteText.text = petBreed
+        // Asigna los datos a los campos
+        binding.editPetName.setText(petName)
+        binding.editOwner.setText(owner)
+        binding.editPhone.setText(phone)
+        binding.autoCompleteText.setText(petBreed)
         binding.idNumber.text = idNumber
-        if (idNumber != null) {
-            if (petDetails != null) {
-                controller(idNumber.toInt(), petDetails, view)
-            }
+
+        if (idNumber != null && petDetails != null) {
+            controller(idNumber.toInt(), petDetails, view)
         }
+
+        // --- VALIDACIÓN DE CAMPOS ---
+        val petNameEditText = binding.editPetName
+        val ownerEditText = binding.editOwner
+        val breedAutoComplete = binding.autoCompleteText
+        val phoneEditText = binding.editPhone
+        val btnEdit = binding.btnEdit
+
+        fun validateFields() {
+            val isPetNameFilled = !petNameEditText.text.isNullOrBlank()
+            val isOwnerFilled = !ownerEditText.text.isNullOrBlank()
+            val isBreedFilled = !breedAutoComplete.text.isNullOrBlank()
+            val isPhoneFilled = !phoneEditText.text.isNullOrBlank()
+
+            val isEnabled = isPetNameFilled && isOwnerFilled && isBreedFilled && isPhoneFilled
+
+            btnEdit.isEnabled = isEnabled
+            btnEdit.alpha = if (isEnabled) 1.0f else 0.5f // ✔ cambia opacidad visual
+        }
+
+
+        petNameEditText.addTextChangedListener { validateFields() }
+        ownerEditText.addTextChangedListener { validateFields() }
+        breedAutoComplete.addTextChangedListener { validateFields() }
+        phoneEditText.addTextChangedListener { validateFields() }
     }
+
     @SuppressLint("CutPasteId")
-    fun controller(id: Int, details: String, view: View){
+    fun controller(id: Int, details: String, view: View) {
         val editPetNameOld: TextInputEditText = view.findViewById(R.id.editPetName)
         val editOwnerOld: TextInputEditText = view.findViewById(R.id.editOwner)
         val editPhoneOld: TextInputEditText = view.findViewById(R.id.editPhone)
         val autoCompleteTextViewOld: AutoCompleteTextView = view.findViewById(R.id.autoCompleteText)
+
         val petNameTextOld: String = editPetNameOld.text.toString()
         val ownerTextOld: String = editOwnerOld.text.toString()
         val phoneTextOld: String = editPhoneOld.text.toString()
         val petBreedTextOld: String = autoCompleteTextViewOld.text.toString()
 
-        binding.backButton.setOnClickListener{
+        binding.backButton.setOnClickListener {
             val bundle = Bundle().apply {
                 putString("petName", petNameTextOld)
                 putString("petBreed", petBreedTextOld)
@@ -79,15 +100,18 @@ class EditAppointmentFragment : Fragment() {
             }
             findNavController().navigate(R.id.action_editAppointmentFragment_to_appointmentDetailsFragment, bundle)
         }
-        binding.btnEdit.setOnClickListener{
+
+        binding.btnEdit.setOnClickListener {
             val editPetName: TextInputEditText = view.findViewById(R.id.editPetName)
             val editOwner: TextInputEditText = view.findViewById(R.id.editOwner)
             val editPhone: TextInputEditText = view.findViewById(R.id.editPhone)
             val autoCompleteTextView: AutoCompleteTextView = view.findViewById(R.id.autoCompleteText)
+
             val petNameText: String = editPetName.text.toString()
             val ownerText: String = editOwner.text.toString()
             val phoneText: String = editPhone.text.toString()
             val petBreedText: String = autoCompleteTextView.text.toString()
+
             val bundle = Bundle().apply {
                 putString("petName", petNameText)
                 putString("petBreed", petBreedText)
@@ -96,6 +120,7 @@ class EditAppointmentFragment : Fragment() {
                 putString("phone", phoneText)
                 putString("idNumber", id.toString())
             }
+
             val inventory = InventoryAppointment(
                 id = id,
                 pet_name = petNameText,
@@ -109,20 +134,11 @@ class EditAppointmentFragment : Fragment() {
         }
     }
 
-    fun saveChanges(){
-//        val id = binding.idNumber.text.toString().toInt()
-//        val inventory = InventoryAppointment(
-//            id = id,
-//            pet_name = binding.editPetName.text.toString(),
-//            pel_symptoms = binding.petDetails.text.toString(),
-//            tel_numbe = binding.editPhone.text.toString(),
-//            owner_name = binding.editOwner.text.toString(),
-//            pet_breed = binding.petBreed.text.toString(),
-//        )
-//        appointmentModel.delete(inventory)
+    fun saveChanges() {
+        // Lógica futura
     }
 
-    fun selectdata(){
-
+    fun selectdata() {
+        // Lógica futura
     }
 }
