@@ -2,8 +2,8 @@ package com.example.petsapplication.view.repository
 
 import android.content.Context
 import com.example.petsapplication.view.data.AppointmentDB
-import com.example.petsapplication.view.AppointmentInterface
-import com.example.petsapplication.view.InventoryAppointment
+import com.example.petsapplication.view.data.AppointmentInterface
+import com.example.petsapplication.view.model.InventoryAppointment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
