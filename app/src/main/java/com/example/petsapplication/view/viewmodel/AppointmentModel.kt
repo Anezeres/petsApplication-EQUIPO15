@@ -1,0 +1,76 @@
+package com.example.petsapplication.view.viewmodel
+
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.petsapplication.view.model.InventoryAppointment
+import com.example.petsapplication.view.repository.AppointmentRepository
+import kotlinx.coroutines.launch
+
+class AppointmentModel(application: Application) : AndroidViewModel(application)
+{
+    val context = getApplication<Application>()
+    private val inventoryRepository = AppointmentRepository(context)
+
+
+    private val _listInventory = MutableLiveData<MutableList<InventoryAppointment>>()
+    val listInventory: LiveData<MutableList<InventoryAppointment>> get() = _listInventory
+
+    private val _progresState = MutableLiveData(false)
+    val progresState: LiveData<Boolean> = _progresState
+
+    fun  save(inventory: InventoryAppointment)
+    {
+        viewModelScope.launch {
+
+            _progresState.value = true
+            try {
+                inventoryRepository.saveInventory(inventory)
+                _progresState.value = false
+            } catch (e: Exception) {
+                _progresState.value = false
+            }
+        }
+    }
+
+    fun  update(inventory: InventoryAppointment)
+    {
+        viewModelScope.launch {
+
+            try {
+                inventoryRepository.updateRepositoy(inventory)
+                Log.d("UpdateRepositoy", "Inventory updated successfully: $inventory")
+            } catch (e: Exception) {
+                Log.d("UpdateRepositoy", "Error updating inventory: ${e.message}")
+            }
+        }
+    }
+
+    fun  delete(inventory: InventoryAppointment)
+    {
+        viewModelScope.launch {
+            try {
+                inventoryRepository.deleteInventory(inventory)
+                Log.d("DeleteInventory", "Inventory deleted successfully: $inventory")
+            } catch (e: Exception) {
+                Log.d("DeleteInventory", "Error deleting inventory: ${e.message}")
+            }
+        }
+    }
+
+    fun getListInventory() {
+        viewModelScope.launch {
+            _progresState.value = true
+            try {
+                _listInventory.value = inventoryRepository.getListInventory()
+                _progresState.value = false
+            } catch (e: Exception) {
+                _progresState.value = false
+            }
+
+        }
+    }
+}
