@@ -2,23 +2,34 @@ package com.example.petsapplication.view.view.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.petsapplication.R
 import com.example.petsapplication.databinding.FragmentEditAppointmentBinding
+import com.example.petsapplication.view.api.DogBreedsResponse
+import com.example.petsapplication.view.api.RetrofitClient
 import com.example.petsapplication.view.model.InventoryAppointment
 import com.example.petsapplication.view.viewmodel.AppointmentModel
 import com.google.android.material.textfield.TextInputEditText
-import androidx.core.widget.addTextChangedListener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EditAppointmentFragment : Fragment() {
     private lateinit var binding: FragmentEditAppointmentBinding
     private val appointmentModel: AppointmentModel by viewModels()
+
+    // NUEVAS VARIABLES para autocomplete
+    private lateinit var adapter: ArrayAdapter<String>
+    private val breedList = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +62,11 @@ class EditAppointmentFragment : Fragment() {
             controller(idNumber.toInt(), petDetails, view)
         }
 
-        // --- VALIDACIÓN DE CAMPOS ---
+        // Configura autocomplete y trae razas
+        setupAutoCompleteTextView()
+        fetchDogBreeds()
+
+        // VALIDACIÓN DE CAMPOS
         val petNameEditText = binding.editPetName
         val ownerEditText = binding.editOwner
         val breedAutoComplete = binding.autoCompleteText
@@ -67,14 +82,44 @@ class EditAppointmentFragment : Fragment() {
             val isEnabled = isPetNameFilled && isOwnerFilled && isBreedFilled && isPhoneFilled
 
             btnEdit.isEnabled = isEnabled
-            btnEdit.alpha = if (isEnabled) 1.0f else 0.5f // ✔ cambia opacidad visual
+            btnEdit.alpha = if (isEnabled) 1.0f else 0.5f
         }
-
 
         petNameEditText.addTextChangedListener { validateFields() }
         ownerEditText.addTextChangedListener { validateFields() }
         breedAutoComplete.addTextChangedListener { validateFields() }
         phoneEditText.addTextChangedListener { validateFields() }
+    }
+
+    private fun setupAutoCompleteTextView() {
+        adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, breedList)
+        binding.autoCompleteText.setAdapter(adapter)
+        binding.autoCompleteText.threshold = 2
+    }
+
+    private fun fetchDogBreeds() {
+        RetrofitClient.dogApiService.dogBreeds?.enqueue(object : Callback<DogBreedsResponse?> {
+            override fun onResponse(call: Call<DogBreedsResponse?>, response: Response<DogBreedsResponse?>) {
+                if (response.isSuccessful) {
+                    response.body()?.message?.let { breeds ->
+                        breedList.clear()
+                        for ((key, value) in breeds) {
+                            breedList.add(key)
+                            value.forEach { subBreed ->
+                                breedList.add("$key $subBreed")
+                            }
+                        }
+                        adapter.notifyDataSetChanged()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch dog breeds", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DogBreedsResponse?>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     @SuppressLint("CutPasteId")
@@ -102,15 +147,10 @@ class EditAppointmentFragment : Fragment() {
         }
 
         binding.btnEdit.setOnClickListener {
-            val editPetName: TextInputEditText = view.findViewById(R.id.editPetName)
-            val editOwner: TextInputEditText = view.findViewById(R.id.editOwner)
-            val editPhone: TextInputEditText = view.findViewById(R.id.editPhone)
-            val autoCompleteTextView: AutoCompleteTextView = view.findViewById(R.id.autoCompleteText)
-
-            val petNameText: String = editPetName.text.toString()
-            val ownerText: String = editOwner.text.toString()
-            val phoneText: String = editPhone.text.toString()
-            val petBreedText: String = autoCompleteTextView.text.toString()
+            val petNameText: String = editPetNameOld.text.toString()
+            val ownerText: String = editOwnerOld.text.toString()
+            val phoneText: String = editPhoneOld.text.toString()
+            val petBreedText: String = autoCompleteTextViewOld.text.toString()
 
             val bundle = Bundle().apply {
                 putString("petName", petNameText)
@@ -134,11 +174,6 @@ class EditAppointmentFragment : Fragment() {
         }
     }
 
-    fun saveChanges() {
-        // Lógica futura
-    }
-
-    fun selectdata() {
-        // Lógica futura
-    }
+    fun saveChanges() {}
+    fun selectdata() {}
 }
