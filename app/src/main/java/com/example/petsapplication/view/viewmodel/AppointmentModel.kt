@@ -16,25 +16,25 @@ class AppointmentModel(application: Application) : AndroidViewModel(application)
     private val inventoryRepository = AppointmentRepository(context)
 
 
-    private val _listInventory = MutableLiveData<MutableList<InventoryAppointment>>()
-    val listInventory: LiveData<MutableList<InventoryAppointment>> get() = _listInventory
+    val listInventory: LiveData<MutableList<InventoryAppointment>> = inventoryRepository.getListInventory()
+
 
     private val _progresState = MutableLiveData(false)
     val progresState: LiveData<Boolean> = _progresState
 
-    fun  save(inventory: InventoryAppointment)
-    {
+    fun save(inventory: InventoryAppointment) {
         viewModelScope.launch {
-
             _progresState.value = true
             try {
                 inventoryRepository.saveInventory(inventory)
-                _progresState.value = false
             } catch (e: Exception) {
+                Log.e("AppointmentModel", "Error guardando cita", e)
+            } finally {
                 _progresState.value = false
             }
         }
     }
+
 
     fun  update(inventory: InventoryAppointment)
     {
@@ -61,16 +61,5 @@ class AppointmentModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun getListInventory() {
-        viewModelScope.launch {
-            _progresState.value = true
-            try {
-                _listInventory.value = inventoryRepository.getListInventory()
-                _progresState.value = false
-            } catch (e: Exception) {
-                _progresState.value = false
-            }
 
-        }
-    }
 }

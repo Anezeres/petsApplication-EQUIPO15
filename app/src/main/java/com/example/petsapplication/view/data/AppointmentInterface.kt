@@ -7,15 +7,16 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.petsapplication.view.model.InventoryAppointment
+import androidx.lifecycle.LiveData
+
 
 @Dao
-interface AppointmentInterface
-{
+interface AppointmentInterface {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(inventory: InventoryAppointment)
 
     @Query("SELECT * FROM InventoryAppointment")
-    suspend fun getList(): MutableList<InventoryAppointment>
+    fun getList(): LiveData<MutableList<InventoryAppointment>> // 👈 CAMBIO AQUÍ
 
     @Delete
     suspend fun delete(inventory: InventoryAppointment)
