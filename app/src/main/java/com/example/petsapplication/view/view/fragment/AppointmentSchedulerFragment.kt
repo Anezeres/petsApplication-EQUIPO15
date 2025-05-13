@@ -41,7 +41,6 @@ class AppointmentSchedulerFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        appointmentModel.getListInventory()
         appointmentModel.listInventory.observe(viewLifecycleOwner) { listInventory ->
             val recycler = binding.recyclerview
             val layoutManager = LinearLayoutManager(context)
@@ -66,6 +65,7 @@ class AppointmentSchedulerFragment : Fragment() {
             putString("owner", inventoryAppointment.owner_name)
             putString("phone", inventoryAppointment.tel_numbe)
             putString("idNumber", inventoryAppointment.id.toString())
+            putString("imageUrl",   inventoryAppointment.imageUrl)
         }
         findNavController().navigate(R.id.action_appointmentSchedulerFragment_to_appointmentDetailsFragment, bundle)
     }

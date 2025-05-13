@@ -12,7 +12,7 @@
         <RelativeLayout
             android:id="@+id/header"
             android:layout_width="0dp"
-            android:layout_height="200dp"
+            android:layout_height="220dp"
             android:background="@drawable/curved_header"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,10 +26,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="90dp"
                 android:text="@string/administrador_de_citas"
                 android:textColor="@color/white"
-                android:textSize="22sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <ImageView

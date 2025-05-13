@@ -3,6 +3,7 @@ package com.example.petsapplication.view.view.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import retrofit2.Response
 import androidx.fragment.app.viewModels
 import com.example.petsapplication.view.model.InventoryAppointment
 import com.example.petsapplication.view.viewmodel.AppointmentModel
+import com.example.petsapplication.view.api.DogImageResponse
 
 class AddNewAppointmentFragment : Fragment() {
     private lateinit var binding: FragmentAddNewAppointmentBinding
@@ -53,6 +55,26 @@ class AddNewAppointmentFragment : Fragment() {
         setupAutoCompleteTextView()
         fetchDogBreeds()
     }
+
+    private fun fetchImageForBreed(breed: String, callback: (String) -> Unit) {
+        val mainBreed = breed.split(" ")[0] // usa solo la raza principal si hay subrazas
+        RetrofitClient.dogApiService.getRandomDogImageByBreed(mainBreed).enqueue(object : Callback<DogImageResponse> {
+            override fun onResponse(call: Call<DogImageResponse>, response: Response<DogImageResponse>) {
+                if (response.isSuccessful) {
+                    val imageUrl = response.body()?.message ?: ""
+                    callback(imageUrl)
+                } else {
+                    callback("")
+                }
+            }
+
+            override fun onFailure(call: Call<DogImageResponse>, t: Throwable) {
+                callback("")
+            }
+        })
+    }
+
+
 
     private fun setupAutoCompleteTextView() {
         adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, breedList)
@@ -120,15 +142,22 @@ class AddNewAppointmentFragment : Fragment() {
                 val ownerName = binding.editText2.text.toString()
                 val petBreed = binding.autoCompleteText.text.toString()
 
-                val inventory = InventoryAppointment(
-                    pet_name = petName,
-                    pel_symptoms = pelSymptoms,
-                    tel_numbe = telNumber,
-                    owner_name = ownerName,
-                    pet_breed = petBreed
-                )
-                appointmentModel.save(inventory)
-                findNavController().navigate(R.id.action_addNewAppointmentFragment_to_appointmentSchedulerFragment)
+
+
+                fetchImageForBreed(petBreed) { imageUrl ->
+                    val inventory = InventoryAppointment(
+                        pet_name = petName,
+                        pel_symptoms = pelSymptoms,
+                        tel_numbe = telNumber,
+                        owner_name = ownerName,
+                        pet_breed = petBreed,
+                        imageUrl = imageUrl // <--- ¡aquí se incluye la URL de la imagen!
+                    )
+                    Log.d("AddAppointment", "Guardando: $inventory")
+                    appointmentModel.save(inventory)
+                    findNavController().navigate(R.id.action_addNewAppointmentFragment_to_appointmentSchedulerFragment)
+                }
+
             }
         }
     }

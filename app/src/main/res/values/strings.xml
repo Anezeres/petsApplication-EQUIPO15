@@ -25,7 +25,7 @@
     <color name="button_enabled_text_color">@color/white</color>
     <color name="button_disabled_text_color">@color/bg_secundary</color>
     <string name="dog_image_desc">Descripción de la imagen del perro</string>
-    <string name="administrador_de_citas">Administrador de citas</string>
+    <string name="administrador_de_citas">Administrador\nde citas</string>
     <string name="todo">TODO</string>
     <string name="dogapp">DogApp</string>
 
