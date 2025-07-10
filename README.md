@@ -50,7 +50,7 @@ DogApp es una aplicación móvil desarrollada en Android Studio que permite a lo
 ## 🔗 Enlaces útiles
 
 - 🔗 **Repositorio del proyecto:** [Enlace al repositorio](https://github.com/Anezeres/petsApplication) 
-- 🔗 **Tablero de Trello:** [Enlace a Jira](https://trello.com/b/44ZcKHGT/redops-moviles) 
+- 🔗 **Tablero de Trello:** [Enlace a Trello](https://trello.com/b/44ZcKHGT/redops-moviles) 
 
 ## 📅 Fechas Clave
 
