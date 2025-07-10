@@ -12,7 +12,6 @@
     <string name="save">Guardar Cita</string>
     <string name="edit">Editar Cita</string>
     <string name="default_spinner_text">Síntomas</string>
-    <string name="title_administrador_de_citas">Administrador de Citas</string>
     <string-array name="illness_array">
         <item>Síntomas</item>
         <item>Solo duerme</item>
